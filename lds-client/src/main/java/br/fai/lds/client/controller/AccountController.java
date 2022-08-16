@@ -31,4 +31,9 @@ public class AccountController {
         return "redirect:/account/sign-in";
     }
 
+    @PostMapping("/login")
+    public String login(UserModel model){
+        return "redirect:/account/sign-up";
+    }
+
 }
