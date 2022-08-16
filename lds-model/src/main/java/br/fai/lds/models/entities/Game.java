@@ -1,6 +1,6 @@
-package br.fai.lds.model.entities;
+package br.fai.lds.models.entities;
 
-import br.fai.lds.model.enums.GameType;
+import br.fai.lds.models.enums.GameType;
 
 public class Game extends BaseEntity {
 

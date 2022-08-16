@@ -1,7 +1,9 @@
 package br.fai.lds.client.controller;
 
+import br.fai.lds.models.entities.UserModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -21,6 +23,12 @@ public class AccountController {
     @GetMapping("/password-recovery")
     public String getPasswordRecoveryPage() {
         return "account/password-recovery";
+    }
+
+    @PostMapping("/create")
+    public String create(UserModel user){
+
+        return "redirect:/account/sign-in";
     }
 
 }

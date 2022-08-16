@@ -1,6 +1,6 @@
-package br.fai.lds.model.entities;
+package br.fai.lds.models.entities;
 
-import br.fai.lds.model.enums.UserType;
+import br.fai.lds.models.enums.UserType;
 
 public class UserModel extends BaseEntity {
     private int id;

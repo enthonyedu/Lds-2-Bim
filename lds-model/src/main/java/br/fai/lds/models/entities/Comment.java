@@ -1,4 +1,4 @@
-package br.fai.lds.model.entities;
+package br.fai.lds.models.entities;
 
 public class Comment extends BaseEntity {
 
