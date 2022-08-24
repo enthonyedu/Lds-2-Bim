@@ -1,16 +1,23 @@
 package br.fai.lds.api.service.impl;
 
 import br.fai.lds.api.service.UserRestService;
+import br.fai.lds.db.dao.UserDao;
 import br.fai.lds.models.entities.UserModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserRestServiceImpl implements UserRestService<UserModel> {
+
+    @Autowired
+    private UserDao userDao;
+
     @Override
     public List<UserModel> find() {
-        return null;
+        return userDao.find();
+
     }
 
     @Override
@@ -35,6 +42,17 @@ public class UserRestServiceImpl implements UserRestService<UserModel> {
 
     @Override
     public UserModel validateLogin(String username, String password) {
-        return null;
+
+        if (username.isEmpty()
+                || password.isEmpty()) {
+            return null;
+        }
+
+        if (username.length() < 4
+                || password.length() < 3) {
+            return null;
+        }
+
+        return userDao.validateUsernameAndPassword(username, password);
     }
 }
