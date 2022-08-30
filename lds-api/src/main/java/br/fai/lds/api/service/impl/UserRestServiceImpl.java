@@ -22,7 +22,10 @@ public class UserRestServiceImpl implements UserRestService<UserModel> {
 
     @Override
     public UserModel findById(int id) {
-        return null;
+
+        if (id < 0) return null;
+
+        return (UserModel) userDao.findById(id);
     }
 
     @Override

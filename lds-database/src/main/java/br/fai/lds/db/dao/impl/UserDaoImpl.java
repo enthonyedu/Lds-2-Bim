@@ -3,12 +3,10 @@ package br.fai.lds.db.dao.impl;
 import br.fai.lds.db.connection.ConnectionFactory;
 import br.fai.lds.db.dao.UserDao;
 import br.fai.lds.models.entities.UserModel;
+import br.fai.lds.models.enums.UserType;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,22 +58,162 @@ public class UserDaoImpl implements UserDao<UserModel> {
 
     @Override
     public UserModel findById(int id) {
-        return null;
+        UserModel item = null;
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        final String sql = "SELECT * FROM usuario WHERE id = ?;";
+
+        try {
+            connection = ConnectionFactory.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+
+                item = new UserModel();
+                item.setId(resultSet.getInt("id"));
+                item.setUsername(resultSet.getString("nome_usuario"));
+                item.setFullName(resultSet.getString("nome_completo"));
+                item.setEmail(resultSet.getString("email"));
+
+                item.setActive(resultSet.getBoolean("esta_ativo"));
+
+                item.setLastModified(resultSet.getTimestamp("ultima_modificacao"));
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionFactory.close(preparedStatement, connection, resultSet);
+
+        }
+
+
+        return item;
     }
 
     @Override
     public int create(UserModel entity) {
-        return 0;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        int id = -1;
+
+        String sql = "INSERT INTO usuario(nome_completo, senha, nome_usuario, email, tipo, esta_ativo, criado_em, " +
+                " criado_por, ultima_modificacao VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ; ";
+
+        try {
+            connection = ConnectionFactory.getConnection();
+
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, entity.getFullName());
+            preparedStatement.setString(2, entity.getPassword());
+            preparedStatement.setString(3, entity.getUsername());
+            preparedStatement.setString(4, entity.getEmail());
+            preparedStatement.setString(5, UserType.CLIENT.toString());
+            preparedStatement.setBoolean(6, true);
+            preparedStatement.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(8, entity.getUsername());
+            preparedStatement.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
+
+
+            preparedStatement.execute();
+            resultSet = preparedStatement.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                id = resultSet.getInt(1);
+
+            }
+            connection.commit();
+            return id;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return id;
+        } finally {
+            ConnectionFactory.close(preparedStatement, connection, resultSet);
+
+        }
     }
 
     @Override
     public boolean update(UserModel entity) {
-        return false;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        String sql = "UPDATE usuario SET nome_completo = ?, ultima_modificacao = ?, email = ? WHERE id = ? ; ";
+
+        try {
+            connection = ConnectionFactory.getConnection();
+
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, entity.getFullName());
+            preparedStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(3, entity.getEmail());
+            preparedStatement.setInt(4, entity.getId());
+
+            preparedStatement.execute();
+            connection.commit();
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return false;
+        } finally {
+            ConnectionFactory.close(preparedStatement, connection);
+
+        }
     }
 
     @Override
     public boolean deleteById(int id) {
-        return false;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        String sql = "DELETE FROM usuario WHERE id = ? ; ";
+
+        try {
+            connection = ConnectionFactory.getConnection();
+
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.execute();
+            connection.commit();
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return false;
+        } finally {
+            ConnectionFactory.close(preparedStatement, connection);
+
+        }
     }
 
     @Override

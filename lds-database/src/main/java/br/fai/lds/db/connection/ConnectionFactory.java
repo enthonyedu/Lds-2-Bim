@@ -16,9 +16,9 @@ public class ConnectionFactory {
 
     public static Connection getConnection() {
         try {
-            if (connection != null) {
-                return connection;
-            }
+//            if (connection != null) {
+//                return connection;
+//            }
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
         } catch (SQLException e) {
@@ -30,6 +30,12 @@ public class ConnectionFactory {
     public static void close(PreparedStatement preparedStatement, Connection connection, ResultSet resultSet) {
         closePreparedStatement(preparedStatement);
         closeResultSet(resultSet);
+        closeConnection(connection);
+
+    }
+
+    public static void close(PreparedStatement preparedStatement, Connection connection) {
+        closePreparedStatement(preparedStatement);
         closeConnection(connection);
 
     }

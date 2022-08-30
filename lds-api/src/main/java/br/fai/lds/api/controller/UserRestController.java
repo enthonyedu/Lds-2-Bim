@@ -5,10 +5,7 @@ import br.fai.lds.api.service.UserRestService;
 import br.fai.lds.models.entities.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +28,17 @@ public class UserRestController {
 
 
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<UserModel> findById(@PathVariable("id") final int id) {
+
+        UserModel user = (UserModel) userService.findById(id);
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(user);
     }
 }
