@@ -189,7 +189,7 @@ public class UserDaoImpl implements UserDao<UserModel> {
     public boolean deleteById(int id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        String sql = "DELETE FROM usuario WHERE id = ? ; ";
+        String sql = "DELETE FROM usuario WHERE id = ?; ";
 
         try {
             connection = ConnectionFactory.getConnection();

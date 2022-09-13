@@ -7,9 +7,9 @@ public interface BaseRestService<T> {
 
     T findById(int id);
 
-    int create (T entity);
+    int create(T entity);
 
-    boolean update(T entity);
+    boolean update(int id, T entity);
 
     boolean deleteById(int id);
 

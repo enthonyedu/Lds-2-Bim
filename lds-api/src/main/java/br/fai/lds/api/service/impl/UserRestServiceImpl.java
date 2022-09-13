@@ -30,17 +30,24 @@ public class UserRestServiceImpl implements UserRestService<UserModel> {
 
     @Override
     public int create(UserModel entity) {
-        return 0;
+        return userDao.create(entity);
     }
 
     @Override
-    public boolean update(UserModel entity) {
-        return false;
+    public boolean update(final int id, UserModel entity) {
+
+        UserModel user = (UserModel) userDao.findById(id);
+        if (user == null) return false;
+
+        user.setEmail(entity.getEmail());
+        user.setFullName(entity.getFullName());
+
+        return userDao.update(user);
     }
 
     @Override
     public boolean deleteById(int id) {
-        return false;
+        return userDao.deleteById(id);
     }
 
     @Override

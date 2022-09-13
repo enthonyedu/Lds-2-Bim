@@ -32,7 +32,7 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public String create(UserModel user){
+    public String create(UserModel user) {
 
         userService.create(user);
 
@@ -40,9 +40,12 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("username") final String username, @RequestParam("password") final String password){
-        userService.validateUsernameAndPassword(username, password);
-        return "redirect:/account/sign-up";
+    public String login(@RequestParam("username") final String username, @RequestParam("password") final String password) {
+        UserModel userModel = userService.validateUsernameAndPassword(username, password);
+        if (userModel == null) {
+            return "redirect:/account/sign-up";
+        }
+        return "redirect:/";
     }
 
 }

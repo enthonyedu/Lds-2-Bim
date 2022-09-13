@@ -41,4 +41,31 @@ public class UserRestController {
 
         return ResponseEntity.ok(user);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable("id") final int id) {
+
+        boolean result = userService.deleteById(id);
+        return result ? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
+
+
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Integer> create(@RequestBody final UserModel user) {
+        int userId = userService.create(user);
+        if (userId == -1) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(userId);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Boolean> update(@PathVariable("id") final int id, @RequestBody final UserModel entity) {
+
+        boolean response = userService.update(id, entity);
+
+        return response ? ResponseEntity.ok(response) : ResponseEntity.badRequest().build();
+
+    }
 }
