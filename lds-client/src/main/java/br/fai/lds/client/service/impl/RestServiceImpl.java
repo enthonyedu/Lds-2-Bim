@@ -1,6 +1,7 @@
 package br.fai.lds.client.service.impl;
 
 import br.fai.lds.client.service.RestService;
+import com.google.gson.Gson;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -52,8 +53,27 @@ public class RestServiceImpl<T> implements RestService<T> {
     }
 
     @Override
-    public T getById(String resource) {
-        return null;
+    public T getById(String resource, Class<T> clazz) {
+
+        T response = null;
+
+        final RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            final HttpEntity<String> requestEntity = new HttpEntity<>("");
+
+            final ResponseEntity<String> requestResponse = restTemplate.exchange(buidEndpoint(resource), HttpMethod.GET,
+                    requestEntity, String.class);
+
+            final Gson gson = new Gson();
+            response = gson.fromJson(requestResponse.getBody(), clazz);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
     }
 
     @Override
@@ -64,7 +84,8 @@ public class RestServiceImpl<T> implements RestService<T> {
         try {
             final HttpEntity<T> httpEntity = new HttpEntity<>(entity);
 
-            final ResponseEntity<String> responseEntity = restTemplate.exchange(buidEndpoint(resource), HttpMethod.POST, httpEntity, String.class);
+            final ResponseEntity<String> responseEntity = restTemplate.exchange(buidEndpoint(resource), HttpMethod.POST,
+                    httpEntity, String.class);
 
             final String response = responseEntity.getBody();
             return Integer.parseInt(response);
@@ -78,11 +99,45 @@ public class RestServiceImpl<T> implements RestService<T> {
 
     @Override
     public boolean put(String resource, T entity) {
-        return false;
+
+        boolean response = false;
+
+        final RestTemplate restTemplate = new RestTemplate();
+        try {
+
+            final HttpEntity<T> httpEntity = new HttpEntity<>(entity);
+
+            final ResponseEntity<Boolean> responseEntity = restTemplate.exchange(buidEndpoint(resource), HttpMethod.PUT,
+                    httpEntity, Boolean.class);
+
+            response = responseEntity.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
     }
 
     @Override
     public boolean deleteById(String resource) {
-        return false;
+
+        boolean response = false;
+
+        final RestTemplate restTemplate = new RestTemplate();
+
+        try {
+
+            HttpEntity<String> httpEntity = new HttpEntity<>("");
+
+            final ResponseEntity<Boolean> requestResponse = restTemplate.exchange(buidEndpoint(resource),
+                    HttpMethod.DELETE, httpEntity, Boolean.class);
+
+            response = requestResponse.getBody();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
     }
 }

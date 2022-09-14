@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" layout:decorate="'{layout}">
+<html lang="en" layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,7 +7,59 @@
 <body>
 
     <div layout:fragment="body">
-        <h1>sla</h1>
+        <div class="container-fluid">
+            <h1 class="mt-4">Usuários</h1>
+
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item">Lista de usuários</li>
+            </ol>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table mr-1">Usuários cadastrados</i>
+
+            </div>
+                <div class="card-body">
+
+                    <div class="row float-right">
+                        <a href="#">Gerar relatório</a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th></th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr th:each="user : ${users}">
+                                    <td th:text="${user.id}">1</td>
+
+                                    <td th:text="${user.fullName}">Tiburssinho</td>
+
+                                    <td th:text="${user.email}">tiburssinho@gmail.com</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+
+                </div>
+        </div>
         <div>
 
 </body>

@@ -19,42 +19,47 @@ public class UserServiceImpl implements UserService<UserModel> {
 
     private static final String BASE_ENDPOINT = "http://localhost:8081/api/";
 
-    private String buidEndpoint(String resource) {
+    private String buildEndpoint(String resource) {
         return BASE_ENDPOINT + resource;
     }
 
 
     @Autowired
-    private RestService restService;
+    private RestService<UserModel> restService;
 
     @Override
     public int create(UserModel entity) {
-        return 0;
+
+        return restService.post("user/create", entity);
     }
 
     @Override
     public List<UserModel> find() {
-        return null;
+
+        return restService.get("user/find");
     }
 
     @Override
     public UserModel findById(int id) {
-        return null;
+
+        return restService.getById("user/find/" + id, UserModel.class);
     }
 
     @Override
-    public boolean update(UserModel entity) {
-        return false;
+    public boolean update(int id, UserModel entity) {
+
+        return restService.put("user/update/" + id, entity);
     }
 
     @Override
     public boolean deleteById(int id) {
-        return false;
+
+        return restService.deleteById("user/delete/" + id);
     }
 
     @Override
     public UserModel validateUsernameAndPassword(String username, String password) {
-        
+
         try {
             RestTemplate restTemplate = new RestTemplate();
 
@@ -62,7 +67,8 @@ public class UserServiceImpl implements UserService<UserModel> {
 
 
             String resource = "account/login?username=" + username + "&password=" + password;
-            ResponseEntity<UserModel> responseEntity = restTemplate.exchange(buidEndpoint(resource), HttpMethod.POST, httpEntity, UserModel.class);
+            ResponseEntity<UserModel> responseEntity = restTemplate.exchange(buildEndpoint(resource),
+                    HttpMethod.POST, httpEntity, UserModel.class);
 
 
             if (responseEntity.getStatusCode() != HttpStatus.OK) {

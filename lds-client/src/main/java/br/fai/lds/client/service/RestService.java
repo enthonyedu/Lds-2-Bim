@@ -12,7 +12,7 @@ public interface RestService<T> {
 
     List<T> get(final String resource);
 
-    T getById(final String resource);
+    T getById(final String resource, Class<T> clazz);
 
     int post(final String resource, T entity);
 
