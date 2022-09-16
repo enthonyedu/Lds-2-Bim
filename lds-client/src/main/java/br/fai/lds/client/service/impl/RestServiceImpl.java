@@ -41,7 +41,8 @@ public class RestServiceImpl<T> implements RestService<T> {
         try {
             final HttpEntity<String> requestEntity = new HttpEntity<>("");
 
-            ResponseEntity<List<T>> requestResponse = restTemplate.exchange(buidEndpoint(resource), HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<T>>() {
+            ResponseEntity<List<T>> requestResponse = restTemplate.exchange(buidEndpoint(resource),
+                    HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<T>>() {
             });
 
             response = requestResponse.getBody();
