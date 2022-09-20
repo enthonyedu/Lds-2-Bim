@@ -36,7 +36,7 @@ public class AccountController {
 
         userService.create(user);
 
-        return "redirect:/account/sign-in";
+        return "redirect:/user/list";
     }
 
     @PostMapping("/login")
