@@ -107,7 +107,7 @@ public class UserDaoImpl implements UserDao<UserModel> {
         int id = -1;
 
         String sql = "INSERT INTO usuario(nome_completo, senha, nome_usuario, email, tipo, esta_ativo, criado_em, " +
-                " criado_por, ultima_modificacao VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ; ";
+                " criado_por, ultima_modificacao) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ; ";
 
         try {
             connection = ConnectionFactory.getConnection();
