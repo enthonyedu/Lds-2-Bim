@@ -16,4 +16,10 @@ public class PlaygroundRestController {
 
         return ResponseEntity.ok("boa noite =D");
     }
+
+    @GetMapping("/openapi-test")
+    public ResponseEntity<String> getOpenApi() {
+
+        return ResponseEntity.ok("teste com o OpenApi");
+    }
 }
