@@ -1,11 +1,23 @@
 package br.fai.lds.client.config.security;
 
+import br.fai.lds.client.config.security.providers.FaiAuthenticationProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private FaiAuthenticationProvider authenticationProvider;
+
+    @Override
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider);
+
+    }
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -22,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/account/sign-in")
-                .loginProcessingUrl("/login")
+                .loginProcessingUrl("/login").permitAll()
                 .defaultSuccessUrl("/");
     }
 }
