@@ -27,16 +27,15 @@ public class FaiAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
         UserModel userModel = userService.validateUsernameAndPassword(username, password);
 
-//        if (userModel == null) {
-//            return null;
-//        }
+        if (userModel == null) {
+            return null;
+        }
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"));
 
-        return new UsernamePasswordAuthenticationToken(new UserModel(), password, grantedAuthorities);
-//        return new UsernamePasswordAuthenticationToken(UserModel(), password, grantedAuthorities);
+        return new UsernamePasswordAuthenticationToken(UserModel(), password, grantedAuthorities);
     }
 
     @Override
