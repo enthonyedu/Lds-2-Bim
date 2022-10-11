@@ -54,17 +54,17 @@
 
                             <td>
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-4" sec:authorize="hasAnyRole('ADMINISTRADOR', 'USUARIO')">
                                         <a th:href="@{/user/detail/{id} (id=${user.id}) }" class="btn btn-primary" role="button" >
                                             <i class="fas fa-address-card"></i>
                                         </a>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-4" sec:authorize="hasRole('USUARIO')">
                                         <a th:href="@{/user/edit/{id} (id=${user.id}) }" class="btn btn-warning" role="button" >
                                             <i class="fas fa-lock"></i>
                                         </a>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-4" sec:authorize="hasRole('ADMINISTRADOR')">
                                         <a th:href="@{/user/delete/{id} (id=${user.id}) }" class="btn btn-danger" role="button" >
                                             <i class="fas fa-user-alt-slash"></i>
                                         </a>
