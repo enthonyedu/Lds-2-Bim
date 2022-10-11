@@ -41,6 +41,9 @@ public class UserDaoImpl implements UserDao<UserModel> {
 
                 user.setLastModified(resultSet.getTimestamp("ultima_modificacao"));
 
+                String userType = resultSet.getString("tipo");
+                user.setType(UserType.valueOf(userType));
+
                 items.add(user);
             }
 
@@ -84,6 +87,9 @@ public class UserDaoImpl implements UserDao<UserModel> {
                 item.setActive(resultSet.getBoolean("esta_ativo"));
 
                 item.setLastModified(resultSet.getTimestamp("ultima_modificacao"));
+
+                String userType = resultSet.getString("tipo");
+                item.setType(UserType.valueOf(userType));
             }
 
 
@@ -119,7 +125,7 @@ public class UserDaoImpl implements UserDao<UserModel> {
             preparedStatement.setString(2, entity.getPassword());
             preparedStatement.setString(3, entity.getUsername());
             preparedStatement.setString(4, entity.getEmail());
-            preparedStatement.setString(5, UserType.CLIENT.toString());
+            preparedStatement.setString(5, UserType.USUARIO.toString());
             preparedStatement.setBoolean(6, true);
             preparedStatement.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(8, entity.getUsername());
@@ -249,6 +255,10 @@ public class UserDaoImpl implements UserDao<UserModel> {
             user.setActive(resultSet.getBoolean("esta_ativo"));
 
             user.setLastModified(resultSet.getTimestamp("ultima_modificacao"));
+
+            String userType = resultSet.getString("tipo");
+            user.setType(UserType.valueOf(userType));
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
