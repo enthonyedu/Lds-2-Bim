@@ -35,7 +35,7 @@ public class FaiAuthenticationProvider implements AuthenticationProvider {
 
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"));
 
-        return new UsernamePasswordAuthenticationToken(UserModel(), password, grantedAuthorities);
+        return new UsernamePasswordAuthenticationToken(userModel, password, grantedAuthorities);
     }
 
     @Override
