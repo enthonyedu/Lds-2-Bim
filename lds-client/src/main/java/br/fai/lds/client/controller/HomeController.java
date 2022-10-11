@@ -15,10 +15,6 @@ public class HomeController {
 
         UserModel user = (UserModel) session.getAttribute("currentUser");
 
-        if (user == null) {
-            return "redirect:/";
-        }
-
         model.addAttribute("user", user);
 
         return "home";
