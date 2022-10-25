@@ -23,6 +23,9 @@ public class UserController {
     @GetMapping("/list")
     public String getUsers(final Model model) {
 
+        //Para testes
+//        userService = null;
+
         List<UserModel> users = userService.find();
 
         if (users == null || users.isEmpty()) {
