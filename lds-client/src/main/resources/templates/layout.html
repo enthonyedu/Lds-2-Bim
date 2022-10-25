@@ -142,7 +142,10 @@
                     <li class="nav-item dropdown no-arrow" sec:authorize="isAuthenticated()">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${user.fullName}">Douglas McGee</span>
+
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${user.fullName}" th:if="${user != null}">Douglas McGee</span>
+
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:if="${user == null}">---</span>
                             <img class="img-profile rounded-circle"
                                  src="/img/undraw_profile.svg">
                         </a>
