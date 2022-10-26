@@ -4,10 +4,7 @@ import br.fai.lds.client.service.RestService;
 import br.fai.lds.client.service.UserService;
 import br.fai.lds.models.entities.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -63,10 +60,12 @@ public class UserServiceImpl implements UserService<UserModel> {
         try {
             RestTemplate restTemplate = new RestTemplate();
 
-            HttpEntity<String> httpEntity = new HttpEntity<>("");
+            HttpHeaders httpHeaders = restService.getAuthenticationHeaders(username, password);
 
+            HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
 
-            String resource = "account/login?username=" + username + "&password=" + password;
+            String resource = "account/login";
+
             ResponseEntity<UserModel> responseEntity = restTemplate.exchange(buildEndpoint(resource),
                     HttpMethod.POST, httpEntity, UserModel.class);
 
