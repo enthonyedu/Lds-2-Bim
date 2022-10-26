@@ -3,6 +3,7 @@ package br.fai.lds.models.entities;
 import br.fai.lds.models.enums.UserType;
 
 public class UserModel extends BaseEntity {
+
     private int id;
     private String username;
     private String password;
@@ -11,6 +12,16 @@ public class UserModel extends BaseEntity {
     private UserType type;
     private boolean isActive;
     private byte[] avatar;
+
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public int getId() {
         return id;
