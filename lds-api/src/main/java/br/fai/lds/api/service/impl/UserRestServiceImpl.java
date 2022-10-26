@@ -1,5 +1,6 @@
 package br.fai.lds.api.service.impl;
 
+import br.fai.lds.api.enums.Credentials;
 import br.fai.lds.api.service.UserRestService;
 import br.fai.lds.db.dao.UserDao;
 import br.fai.lds.models.entities.UserModel;
@@ -78,7 +79,7 @@ public class UserRestServiceImpl implements UserRestService<UserModel> {
         return null;
     }
 
-    private Map<String, String> decodeAndGetUsernameAndPassword(String encodedData) {
+    private Map<Credentials, String> decodeAndGetUsernameAndPassword(String encodedData) {
 
         String[] splitData = encodedData.split("Basic ");
 
@@ -103,9 +104,9 @@ public class UserRestServiceImpl implements UserRestService<UserModel> {
             return null;
         }
 
-        Map<String, String> credentialsMap = new HashMap<>();
-        credentialsMap.put("USERNAME", credentials[0]);
-        credentialsMap.put("PASSWORD", credentials[1]);
+        Map<Credentials, String> credentialsMap = new HashMap<>();
+        credentialsMap.put(Credentials.USERNAME, credentials[0]);
+        credentialsMap.put(Credentials.PASSWORD, credentials[1]);
 
         return credentialsMap;
     }
