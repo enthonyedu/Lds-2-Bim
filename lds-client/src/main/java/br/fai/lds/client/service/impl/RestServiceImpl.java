@@ -17,12 +17,12 @@ public class RestServiceImpl<T> implements RestService<T> {
 
     private static final String BASE_ENDPOINT = "http://localhost:8081/api/";
 
-    private String buidEndpoint(String resource) {
+    private String buildEndpoint(String resource) {
         return BASE_ENDPOINT + resource;
     }
 
     @Override
-    public HttpHeaders getAuthenticatedHeaders(String username, String password) {
+    public HttpHeaders getAuthenticationHeaders(String username, String password) {
         return null;
     }
 
@@ -41,7 +41,7 @@ public class RestServiceImpl<T> implements RestService<T> {
         try {
             final HttpEntity<String> requestEntity = new HttpEntity<>("");
 
-            ResponseEntity<List<T>> requestResponse = restTemplate.exchange(buidEndpoint(resource),
+            ResponseEntity<List<T>> requestResponse = restTemplate.exchange(buildEndpoint(resource),
                     HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<T>>() {
             });
 
@@ -63,7 +63,7 @@ public class RestServiceImpl<T> implements RestService<T> {
         try {
             final HttpEntity<String> requestEntity = new HttpEntity<>("");
 
-            final ResponseEntity<String> requestResponse = restTemplate.exchange(buidEndpoint(resource), HttpMethod.GET,
+            final ResponseEntity<String> requestResponse = restTemplate.exchange(buildEndpoint(resource), HttpMethod.GET,
                     requestEntity, String.class);
 
             final Gson gson = new Gson();
@@ -85,7 +85,7 @@ public class RestServiceImpl<T> implements RestService<T> {
         try {
             final HttpEntity<T> httpEntity = new HttpEntity<>(entity);
 
-            final ResponseEntity<String> responseEntity = restTemplate.exchange(buidEndpoint(resource), HttpMethod.POST,
+            final ResponseEntity<String> responseEntity = restTemplate.exchange(buildEndpoint(resource), HttpMethod.POST,
                     httpEntity, String.class);
 
             final String response = responseEntity.getBody();
@@ -108,7 +108,7 @@ public class RestServiceImpl<T> implements RestService<T> {
 
             final HttpEntity<T> httpEntity = new HttpEntity<>(entity);
 
-            final ResponseEntity<Boolean> responseEntity = restTemplate.exchange(buidEndpoint(resource), HttpMethod.PUT,
+            final ResponseEntity<Boolean> responseEntity = restTemplate.exchange(buildEndpoint(resource), HttpMethod.PUT,
                     httpEntity, Boolean.class);
 
             response = responseEntity.getBody();
@@ -130,7 +130,7 @@ public class RestServiceImpl<T> implements RestService<T> {
 
             HttpEntity<String> httpEntity = new HttpEntity<>("");
 
-            final ResponseEntity<Boolean> requestResponse = restTemplate.exchange(buidEndpoint(resource),
+            final ResponseEntity<Boolean> requestResponse = restTemplate.exchange(buildEndpoint(resource),
                     HttpMethod.DELETE, httpEntity, Boolean.class);
 
             response = requestResponse.getBody();
