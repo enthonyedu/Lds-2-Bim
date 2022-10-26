@@ -15,9 +15,11 @@ public class AccountRestController {
     private UserRestService userRestService;
 
     @PostMapping("/login")
-    public ResponseEntity<UserModel> login(@RequestParam("username") final String username, @RequestParam("password") final String password){
+    public ResponseEntity<UserModel> login(@RequestHeader("Authorization") String encodedData) {
 
-        UserModel userModel = userRestService.validateLogin(username, password);
+        System.out.println("Request com base64: " + encodedData);
+
+        UserModel userModel = userRestService.validateLogin(encodedData);
 
         if (userModel == null) {
             return ResponseEntity.badRequest().build();
