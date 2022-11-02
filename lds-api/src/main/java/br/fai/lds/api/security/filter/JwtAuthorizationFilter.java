@@ -40,7 +40,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Se Fudeu");
                 return;
-                ;
             }
 
             setupSpringAuthentication(claims.getBody());

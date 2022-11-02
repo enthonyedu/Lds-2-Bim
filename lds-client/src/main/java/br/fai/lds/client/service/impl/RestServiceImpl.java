@@ -1,6 +1,7 @@
 package br.fai.lds.client.service.impl;
 
 import br.fai.lds.client.service.RestService;
+import br.fai.lds.models.entities.UserModel;
 import com.google.gson.Gson;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
@@ -49,12 +51,27 @@ public class RestServiceImpl<T> implements RestService<T> {
     }
 
     @Override
-    public HttpHeaders getRequestHeaders() {
-        return null;
+    public HttpHeaders getRequestHeaders(HttpSession httpSession) {
+        try {
+            UserModel user = (UserModel) httpSession.getAttribute("currentUser");
+
+            System.out.println("userToken" + user.getToken());
+
+            String authHeader = "Bearer " + user.getToken();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.set("Authorization", authHeader);
+
+            return httpHeaders;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HttpHeaders();
+        }
     }
 
     @Override
-    public List<T> get(String resource) {
+    public List<T> get(String resource, HttpHeaders requestHeaders) {
 
         List<T> response = null;
 

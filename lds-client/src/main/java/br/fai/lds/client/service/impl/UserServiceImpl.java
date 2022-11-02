@@ -9,10 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService<UserModel> {
+
+    public UserServiceImpl(HttpSession httpSession) {
+        this.httpSession = httpSession;
+    }
+
+    private HttpSession httpSession;
 
     private static final String BASE_ENDPOINT = "http://localhost:8081/api/";
 
@@ -33,7 +40,9 @@ public class UserServiceImpl implements UserService<UserModel> {
     @Override
     public List<UserModel> find() {
 
-        return restService.get("user/find");
+        HttpHeaders requestHeaders = restService.getRequestHeaders(httpSession);
+
+        return restService.get("user/find", requestHeaders);
     }
 
     @Override

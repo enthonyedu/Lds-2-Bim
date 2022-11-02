@@ -1,6 +1,7 @@
 package br.fai.lds.api.service.impl;
 
 import br.fai.lds.api.enums.Credentials;
+import br.fai.lds.api.service.JwtService;
 import br.fai.lds.api.service.UserRestService;
 import br.fai.lds.db.dao.UserDao;
 import br.fai.lds.models.entities.UserModel;
@@ -18,6 +19,9 @@ public class UserRestServiceImpl implements UserRestService<UserModel> {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Override
     public List<UserModel> find() {
@@ -84,6 +88,8 @@ public class UserRestServiceImpl implements UserRestService<UserModel> {
 
         UserModel user = userDao.validateUsernameAndPassword(username, password);
 
+        String token = jwtService.getJwtToken(user);
+        user.setToken(token);
         user.setPassword(null);
         return user;
     }
