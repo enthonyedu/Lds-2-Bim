@@ -48,19 +48,24 @@ public class UserServiceImpl implements UserService<UserModel> {
     @Override
     public UserModel findById(int id) {
 
-        return restService.getById("user/find/" + id, UserModel.class);
+        HttpHeaders requestHeaders = restService.getRequestHeaders(httpSession);
+
+        return restService.getById("user/find/" + id, UserModel.class, requestHeaders);
     }
 
     @Override
     public boolean update(int id, UserModel entity) {
 
-        return restService.put("user/update/" + id, entity);
+        HttpHeaders requestHeaders = restService.getRequestHeaders(httpSession);
+
+        return restService.put("user/update/" + id, entity, requestHeaders);
     }
 
     @Override
     public boolean deleteById(int id) {
+        HttpHeaders requestHeaders = restService.getRequestHeaders(httpSession);
 
-        return restService.deleteById("user/delete/" + id);
+        return restService.deleteById("user/delete/" + id, requestHeaders);
     }
 
     @Override

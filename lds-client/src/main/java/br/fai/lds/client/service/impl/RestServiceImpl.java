@@ -55,7 +55,7 @@ public class RestServiceImpl<T> implements RestService<T> {
         try {
             UserModel user = (UserModel) httpSession.getAttribute("currentUser");
 
-            System.out.println("userToken" + user.getToken());
+            System.out.println("userToken: " + user.getToken());
 
             String authHeader = "Bearer " + user.getToken();
 
@@ -78,7 +78,7 @@ public class RestServiceImpl<T> implements RestService<T> {
         final RestTemplate restTemplate = new RestTemplate();
 
         try {
-            final HttpEntity<String> requestEntity = new HttpEntity<>("");
+            final HttpEntity<String> requestEntity = new HttpEntity<>(requestHeaders);
 
             ResponseEntity<List<T>> requestResponse = restTemplate.exchange(buildEndpoint(resource),
                     HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<T>>() {
@@ -93,14 +93,22 @@ public class RestServiceImpl<T> implements RestService<T> {
     }
 
     @Override
-    public T getById(String resource, Class<T> clazz) {
+    public T getById(String resource, Class<T> clazz, HttpHeaders requestHeaders) {
 
         T response = null;
 
         final RestTemplate restTemplate = new RestTemplate();
 
         try {
-            final HttpEntity<String> requestEntity = new HttpEntity<>("");
+            HttpEntity<String> requestEntity;
+
+            if (requestHeaders != null) {
+                requestEntity = new HttpEntity<>(requestHeaders);
+            } else {
+                requestEntity = new HttpEntity<>("");
+            }
+
+            //JSON
 
             final ResponseEntity<String> requestResponse = restTemplate.exchange(buildEndpoint(resource), HttpMethod.GET,
                     requestEntity, String.class);
@@ -138,14 +146,14 @@ public class RestServiceImpl<T> implements RestService<T> {
     }
 
     @Override
-    public boolean put(String resource, T entity) {
+    public boolean put(String resource, T entity, HttpHeaders requestHeaders) {
 
         boolean response = false;
 
         final RestTemplate restTemplate = new RestTemplate();
         try {
 
-            final HttpEntity<T> httpEntity = new HttpEntity<>(entity);
+            final HttpEntity<T> httpEntity = new HttpEntity<>(entity, requestHeaders);
 
             final ResponseEntity<Boolean> responseEntity = restTemplate.exchange(buildEndpoint(resource), HttpMethod.PUT,
                     httpEntity, Boolean.class);
@@ -159,15 +167,21 @@ public class RestServiceImpl<T> implements RestService<T> {
     }
 
     @Override
-    public boolean deleteById(String resource) {
+    public boolean deleteById(String resource, HttpHeaders requestHeaders) {
 
         boolean response = false;
 
         final RestTemplate restTemplate = new RestTemplate();
 
         try {
+            HttpEntity<String> httpEntity;
+            if (requestHeaders != null) {
+                httpEntity = new HttpEntity<>(requestHeaders);
 
-            HttpEntity<String> httpEntity = new HttpEntity<>("");
+            } else {
+                httpEntity = new HttpEntity<>("");
+
+            }
 
             final ResponseEntity<Boolean> requestResponse = restTemplate.exchange(buildEndpoint(resource),
                     HttpMethod.DELETE, httpEntity, Boolean.class);
