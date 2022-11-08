@@ -97,6 +97,16 @@
 
             <!--- fim dependencias JWT -->
 
+            <!--- inicio das dependencias do Jasper Report -->
+
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports</artifactId>
+                <version>6.15.0</version>
+            </dependency>
+
+            <!--- fim das dependencias do Jasper Report -->
+
 
         </dependencies>
     </dependencyManagement>

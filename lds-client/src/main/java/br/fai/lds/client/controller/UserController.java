@@ -3,6 +3,7 @@ package br.fai.lds.client.controller;
 import br.fai.lds.client.service.UserService;
 import br.fai.lds.models.entities.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,6 +85,13 @@ public class UserController {
         userService.deleteById(id);
 
         return getUsers(model);
+    }
+
+    @GetMapping("/report/read-all")
+    public ResponseEntity<byte[]> generateReport() {
+
+
+        return null;
     }
 
 }
