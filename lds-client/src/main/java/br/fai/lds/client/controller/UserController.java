@@ -1,8 +1,12 @@
 package br.fai.lds.client.controller;
 
+import br.fai.lds.client.service.ReportService;
 import br.fai.lds.client.service.UserService;
 import br.fai.lds.models.entities.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +28,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ReportService reportService;
 
     @GetMapping("/list")
     public String getUsers(final Model model) {
@@ -90,8 +101,34 @@ public class UserController {
     @GetMapping("/report/read-all")
     public ResponseEntity<byte[]> generateReport() {
 
+        String filePath = reportService.generateAndGetPdfFilePath();
 
-        return null;
+        if (filePath.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        final File pdfFile = Paths.get(filePath).toFile();
+
+        final byte[] fileContent;
+        try {
+            fileContent = Files.readAllBytes(pdfFile.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+
+        String fileName = pdfFile.getName();
+
+        // esse header permite que o conteudo seja exibido no navegador
+        headers.add("Content-Disposition", "inline; filename=" + fileName);
+
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+
+        return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
     }
 
 }
