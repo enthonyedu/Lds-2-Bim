@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,7 +34,10 @@ public class UserController {
     private ReportService reportService;
 
     @GetMapping("/list")
-    public String getUsers(final Model model) {
+    public String getUsers(final Model model, HttpSession session) {
+
+        UserModel user = (UserModel) session.getAttribute("currentUser");
+        model.addAttribute("user", user);
 
         //Para testes
 //        userService = null;
@@ -91,11 +95,11 @@ public class UserController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") final int id, final Model model) {
+    public String delete(@PathVariable("id") final int id, final Model model, HttpSession session) {
 
         userService.deleteById(id);
 
-        return getUsers(model);
+        return getUsers(model, session);
     }
 
     @GetMapping("/report/read-all")
