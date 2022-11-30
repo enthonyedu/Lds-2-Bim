@@ -3,7 +3,6 @@ package br.fai.lds.client.service.impl;
 import br.fai.lds.client.service.RestService;
 import br.fai.lds.client.service.UserService;
 import br.fai.lds.models.entities.UserModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -15,11 +14,16 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService<UserModel> {
 
-    public UserServiceImpl(HttpSession httpSession) {
+    public UserServiceImpl(HttpSession httpSession, RestService<UserModel> restService) {
         this.httpSession = httpSession;
+        this.restService = restService;
     }
 
     private HttpSession httpSession;
+
+    // foi removido o autowired para que a injecao seja feita pelo construtor
+//    @Autowired
+    private RestService<UserModel> restService;
 
     private static final String BASE_ENDPOINT = "http://localhost:8081/api/";
 
@@ -27,9 +31,6 @@ public class UserServiceImpl implements UserService<UserModel> {
         return BASE_ENDPOINT + resource;
     }
 
-
-    @Autowired
-    private RestService<UserModel> restService;
 
     @Override
     public int create(UserModel entity) {
@@ -42,11 +43,22 @@ public class UserServiceImpl implements UserService<UserModel> {
 
         HttpHeaders requestHeaders = restService.getRequestHeaders(httpSession);
 
-        return restService.get("user/find", requestHeaders);
+        List<UserModel> userModels = restService.get("user/find", requestHeaders);
+
+//        for (UserModel user :
+//                userModels) {
+//            user.setUsername("gambiarra - " + user.getUsername());
+//        }
+
+        return userModels;
     }
 
     @Override
     public UserModel findById(int id) {
+
+        if (id < 0) {
+            return null;
+        }
 
         HttpHeaders requestHeaders = restService.getRequestHeaders(httpSession);
 
@@ -55,6 +67,18 @@ public class UserServiceImpl implements UserService<UserModel> {
 
     @Override
     public boolean update(int id, UserModel entity) {
+
+        if (id < 0) {
+            return false;
+        }
+
+        if (entity == null) {
+            return false;
+        }
+
+        if (id != entity.getId()) {
+            return false;
+        }
 
         HttpHeaders requestHeaders = restService.getRequestHeaders(httpSession);
 
